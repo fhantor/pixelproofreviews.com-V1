@@ -1,0 +1,522 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes featuredProgress {
+  from { width: 0%; }
+  to   { width: 100%; }
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 263 70% 50%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 263 70% 50%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 263 70% 60%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 263 70% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  .hover-elevate {
+    @apply transition-shadow duration-200 hover:shadow-md;
+  }
+  
+  .active-elevate-2 {
+    @apply active:shadow-sm;
+  }
+
+  /* Future-proof button styling - works with Elementor, Gutenberg, custom HTML, or any builder */
+  a[class*="button"],
+  a[class*="btn"] {
+    @apply inline-flex items-center justify-center rounded-lg font-medium transition-all duration-300 no-underline cursor-pointer;
+    background: linear-gradient(135deg, #7c3aed, #6d28d9);
+    color: white !important;
+    padding: 0.5rem 1.25rem;
+    font-size: 0.875rem;
+    text-decoration: none !important;
+    box-shadow: 0 4px 14px rgba(109, 40, 217, 0.4);
+  }
+
+  /* Dark mode: brighter purple so buttons pop on dark backgrounds */
+  .dark a[class*="button"],
+  .dark a[class*="btn"] {
+    background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+    box-shadow: 0 4px 20px rgba(139, 92, 246, 0.5);
+  }
+
+  a[class*="button"]:hover,
+  a[class*="btn"]:hover {
+    @apply shadow-lg no-underline;
+    background: linear-gradient(135deg, #6d28d9, #5b21b6);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(109, 40, 217, 0.5) !important;
+    text-decoration: none !important;
+  }
+
+  .dark a[class*="button"]:hover,
+  .dark a[class*="btn"]:hover {
+    background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+    box-shadow: 0 8px 30px rgba(139, 92, 246, 0.6) !important;
+  }
+
+  /* Elementor-specific size variants */
+  .elementor-size-sm[class*="button"] {
+    padding: 0.4rem 1rem;
+    font-size: 0.8125rem;
+  }
+
+  .elementor-size-md[class*="button"] {
+    padding: 0.6rem 1.5rem;
+    font-size: 0.9375rem;
+  }
+
+  .elementor-size-lg[class*="button"] {
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+  }
+
+  /* Elementor animation support */
+  .elementor-animation-grow[class*="button"]:hover {
+    transform: scale(1.05);
+  }
+
+  /* Button content wrapper */
+  .elementor-button-content-wrapper {
+    @apply flex items-center gap-1;
+  }
+
+  .elementor-button-text {
+    @apply whitespace-nowrap;
+  }
+
+  /* ========================================
+     WordPress Content Styling
+     Works with Elementor, Gutenberg, and standard HTML
+     ======================================== */
+
+  /* WordPress Image Alignment */
+  .alignleft {
+    @apply float-left mr-6 mb-4 max-w-[50%];
+  }
+
+  .alignright {
+    @apply float-right ml-6 mb-4 max-w-[50%];
+  }
+
+  .aligncenter {
+    @apply mx-auto block;
+  }
+
+  /* WordPress Figures & Captions */
+  figure.wp-block-image,
+  figure.aligncenter {
+    @apply my-6 text-center;
+  }
+
+  figcaption,
+  .wp-caption-text,
+  .elementor-image-gallery figcaption {
+    @apply text-sm text-muted-foreground mt-2 text-center italic;
+  }
+
+  /* Center all images in article content */
+  .wp-content img {
+    display: block !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  /* Center all buttons in article content */
+  .wp-content a[class*="button"],
+  .wp-content a[class*="btn"],
+  .wp-content .elementor-button-wrapper {
+    display: block !important;
+    text-align: center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    width: fit-content !important;
+  }
+
+  /* ========================================
+     Elementor Layout System
+     Classic sections (pre-3.6) and new containers (3.6+)
+     ======================================== */
+
+  /* Section base */
+  .elementor-section {
+    position: relative;
+    width: 100%;
+  }
+
+  /* Container/row: horizontal flex */
+  .elementor-section .elementor-container,
+  .elementor-row {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Column scaffold */
+  .elementor-column {
+    position: relative;
+    min-height: 1px;
+    flex: 1 1 0%;
+  }
+
+  .elementor-column-wrap,
+  .elementor-widget-wrap {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+  }
+
+  /* Column width classes */
+  .elementor-col-100 { flex: 0 0 100%; max-width: 100%; }
+  .elementor-col-80  { flex: 0 0 80%;  max-width: 80%;  }
+  .elementor-col-75  { flex: 0 0 75%;  max-width: 75%;  }
+  .elementor-col-66  { flex: 0 0 66.666%; max-width: 66.666%; }
+  .elementor-col-60  { flex: 0 0 60%;  max-width: 60%;  }
+  .elementor-col-50  { flex: 0 0 50%;  max-width: 50%;  }
+  .elementor-col-40  { flex: 0 0 40%;  max-width: 40%;  }
+  .elementor-col-33  { flex: 0 0 33.333%; max-width: 33.333%; }
+  .elementor-col-25  { flex: 0 0 25%;  max-width: 25%;  }
+  .elementor-col-20  { flex: 0 0 20%;  max-width: 20%;  }
+
+  /* Stack columns on mobile */
+  @media (max-width: 767px) {
+    .elementor-column {
+      flex: 0 0 100% !important;
+      max-width: 100% !important;
+    }
+  }
+
+  /* New Elementor Flexbox Container (3.6+) */
+  .e-con {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .e-con.e-flex {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .e-con-inner {
+    width: 100%;
+    display: flex;
+    flex-direction: inherit;
+    flex-wrap: inherit;
+    gap: inherit;
+  }
+
+  @media (max-width: 767px) {
+    .e-con.e-flex {
+      flex-direction: column;
+    }
+  }
+
+  /* Elementor Widget Spacing */
+  .elementor-widget {
+    @apply mb-6;
+  }
+
+  .elementor-widget-image {
+    @apply text-center;
+  }
+
+  .elementor-widget-image .elementor-image {
+    @apply inline-block max-w-full;
+  }
+
+  .elementor-widget-image .elementor-image img {
+    @apply rounded-xl max-w-full h-auto;
+  }
+
+  .elementor-widget-text-editor .elementor-widget-container {
+    @apply leading-relaxed;
+  }
+
+  .elementor-widget-button {
+    @apply mb-4;
+  }
+
+  .elementor-button-wrapper {
+    @apply inline-block;
+  }
+
+  .elementor-column {
+    @apply mb-4;
+  }
+
+  .elementor-section-wrap > .elementor-section {
+    @apply mb-8;
+  }
+
+  /* Elementor Inner Sections */
+  .elementor-inner-section .elementor-container {
+    @apply flex flex-wrap gap-4;
+  }
+
+  /* WordPress Galleries */
+  .wp-block-gallery,
+  .blocks-gallery-grid,
+  .elementor-image-gallery {
+    @apply grid grid-cols-2 md:grid-cols-3 gap-4 my-6;
+  }
+
+  .wp-block-gallery .blocks-gallery-item img,
+  .elementor-image-gallery img {
+    @apply rounded-lg w-full h-auto;
+  }
+
+  /* WordPress Tables */
+  .wp-block-table table,
+  table {
+    @apply w-full border-collapse my-6;
+  }
+
+  .wp-block-table th,
+  table th {
+    @apply border border-border bg-muted px-4 py-2 text-left font-semibold;
+  }
+
+  .wp-block-table td,
+  table td {
+    @apply border border-border px-4 py-2;
+  }
+
+  /* WordPress Embeds */
+  .wp-block-embed,
+  .wp-block-embed__wrapper {
+    @apply my-6;
+  }
+
+  .wp-block-embed iframe {
+    @apply w-full aspect-video rounded-xl;
+  }
+
+  /* WordPress Separator */
+  .wp-block-separator,
+  hr {
+    @apply border-t border-border my-8;
+  }
+
+  /* WordPress Callout/Info Boxes */
+  .wp-block-group.has-background {
+    @apply rounded-xl p-6 my-6;
+  }
+
+  /* WordPress Columns */
+  .wp-block-columns {
+    @apply flex flex-wrap gap-4 my-6;
+  }
+
+  .wp-block-column {
+    @apply flex-1 min-w-[200px];
+  }
+
+  /* WordPress Lists */
+  .wp-block-list {
+    @apply mb-4;
+  }
+
+  /* WordPress Code Blocks */
+  .wp-block-code code {
+    @apply bg-muted px-1.5 py-0.5 rounded text-sm font-mono;
+  }
+
+  .wp-block-preformatted pre {
+    @apply bg-dark-900 dark:bg-dark-950 rounded-xl p-4 overflow-x-auto text-sm;
+  }
+
+  /* WordPress Quote Block */
+  .wp-block-quote {
+    @apply border-l-4 border-purple-500 pl-4 italic my-6 text-muted-foreground;
+  }
+
+  .wp-block-quote cite {
+    @apply text-sm text-muted-foreground mt-2 block not-italic;
+  }
+
+  /* WordPress Pullquote */
+  .wp-block-pullquote {
+    @apply border-t-2 border-b-2 border-purple-500 py-6 my-8 text-center;
+  }
+
+  .wp-block-pullquote blockquote {
+    @apply text-xl font-semibold text-foreground;
+  }
+
+  /* WordPress Details/Accordion */
+  .wp-block-details {
+    @apply my-4;
+  }
+
+  .wp-block-details summary {
+    @apply cursor-pointer font-medium text-foreground p-3 rounded-lg bg-muted hover:bg-accent transition-colors;
+  }
+
+  /* WordPress Heading Blocks */
+  .wp-block-heading {
+    @apply font-display font-bold text-foreground;
+  }
+
+  /* WordPress Paragraph Blocks */
+  .wp-block-paragraph {
+    @apply mb-4 leading-relaxed text-muted-foreground;
+  }
+
+  /* WordPress Spacer Blocks */
+  .wp-block-spacer {
+    @apply my-4;
+  }
+
+  /* Responsive iframe wrapper */
+  .iframe-wrapper {
+    @apply relative w-full aspect-video my-6;
+  }
+
+  .iframe-wrapper iframe {
+    @apply absolute inset-0 w-full h-full rounded-xl;
+  }
+
+  /* Article opening title/subtitle styling */
+  article.prose > h2:first-of-type {
+    @apply text-3xl mt-0 mb-2 font-bold text-foreground;
+  }
+
+  article.prose > h2:first-of-type + h3 {
+    @apply text-lg mt-0 mb-6 font-medium text-muted-foreground;
+  }
+
+  /* Elementor opening title/subtitle styling */
+  .wp-content .elementor-heading-title.elementor-size-default {
+    font-size: 1.875rem !important;
+    font-weight: 700 !important;
+    color: hsl(var(--foreground)) !important;
+    margin-top: 0 !important;
+    margin-bottom: 0.5rem !important;
+    line-height: 1.2 !important;
+  }
+
+  /* Force left alignment for ALL text in article content */
+  .wp-content p,
+  .wp-content .elementor-widget-text-editor p,
+  .wp-content .elementor-widget-container,
+  .wp-content .elementor-widget-container p,
+  .wp-content .elementor-text-center,
+  .wp-content .elementor-align-center {
+    text-align: left !important;
+  }
+
+  /* Only center the opening subtitle */
+  .wp-content .opening-subtitle {
+    text-align: center !important;
+  }
+
+  /* Ensure Elementor containers don't center text */
+  .wp-content .e-con.e-flex,
+  .wp-content .e-con-inner {
+    text-align: left !important;
+  }
+
+  /* Override inline font sizes in article content */
+  .wp-content strong[style*="font-size"],
+  .wp-content span[style*="font-size"] {
+    font-size: inherit !important;
+  }
+
+  /* Limit featured image height */
+  .wp-content .elementor-widget-image:first-of-type img,
+  .wp-content img:first-of-type {
+    max-height: 400px !important;
+    width: auto !important;
+    object-fit: cover !important;
+  }
+}
+
+/* ── Featured slider section backgrounds ── */
+.featured-slider {
+  background-color: #ede8ff;
+  background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='1' cy='1' r='1.5' fill='%236d28d9' fill-opacity='0.25'/%3E%3C/svg%3E");
+}
+.dark .featured-slider {
+  background-color: #150d27;
+  background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='1' cy='1' r='1.5' fill='%23a78bfa' fill-opacity='0.15'/%3E%3C/svg%3E");
+}
+
+/* ── Unlayered overrides — these win over all layered rules AND inline styles ── */
+
+/* Article link colors: override any WordPress/Elementor inline color attribute */
+.wp-content a {
+  color: #7c3aed !important;
+}
+.dark .wp-content a {
+  color: #a78bfa !important;
+}
+
+/* Restore white on button-style links (they shouldn't inherit link color) */
+.wp-content a[class*="button"],
+.wp-content a[class*="btn"] {
+  color: #ffffff !important;
+}
+.dark .wp-content a[class*="button"],
+.dark .wp-content a[class*="btn"] {
+  color: #ffffff !important;
+}
+
+/* Dark mode: strip all inline text colors on non-link elements so dark navy/blue
+   text isn't invisible against a dark background. Foreground (light) takes over. */
+.dark .wp-content :not(a):not(button)[style*="color"] {
+  color: hsl(var(--foreground)) !important;
+}
