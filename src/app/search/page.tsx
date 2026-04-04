@@ -4,6 +4,7 @@ import Footer from '@/components/Footer';
 import PostCard from '@/components/PostCard';
 import { Search } from 'lucide-react';
 import Link from 'next/link';
+import { WPPost } from '@/lib/types';
 
 export default async function SearchPage({
   searchParams,
@@ -15,7 +16,7 @@ export default async function SearchPage({
 
   const categories = await getCategories().catch(() => []);
 
-  let results = [];
+  let results: WPPost[] = [];
   if (query) {
     results = await searchPosts(query).catch(() => []);
   }
