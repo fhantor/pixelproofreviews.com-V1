@@ -14,13 +14,9 @@ import Comments from '@/components/Comments';
 import ReadingProgress from '@/components/ReadingProgress';
 import { decodeHtml, toTitleCase } from '@/lib/utils';
 
+// Don't pre-generate at build time — pages are generated on-demand via ISR
 export async function generateStaticParams() {
-  try {
-    const { posts } = await getPosts(1);
-    return posts.map((post) => ({ slug: post.slug }));
-  } catch {
-    return [];
-  }
+  return [];
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {

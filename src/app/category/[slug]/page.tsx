@@ -8,13 +8,9 @@ import PostGrid from '@/components/PostGrid';
 import Sidebar from '@/components/Sidebar';
 import { decodeHtml, toTitleCase } from '@/lib/utils';
 
+// Don't pre-generate at build time — pages are generated on-demand via ISR
 export async function generateStaticParams() {
-  try {
-    const categories = await getCategories();
-    return categories.map((cat) => ({ slug: cat.slug }));
-  } catch {
-    return [];
-  }
+  return [];
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {

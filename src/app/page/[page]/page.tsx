@@ -5,16 +5,9 @@ import Footer from '@/components/Footer';
 import PostGrid from '@/components/PostGrid';
 import Sidebar from '@/components/Sidebar';
 
+// Don't pre-generate at build time — pages are generated on-demand via ISR
 export async function generateStaticParams() {
-  try {
-    const { pagination } = await getPosts(1);
-    const totalPages = pagination.totalPages;
-    return Array.from({ length: totalPages }, (_, i) => ({
-      page: String(i + 1),
-    }));
-  } catch {
-    return [];
-  }
+  return [];
 }
 
 export default async function PaginatedHome({

@@ -7,20 +7,9 @@ import PostGrid from '@/components/PostGrid';
 import Sidebar from '@/components/Sidebar';
 import { decodeHtml, toTitleCase } from '@/lib/utils';
 
+// Don't pre-generate at build time — pages are generated on-demand via ISR
 export async function generateStaticParams() {
-  try {
-    const categories = await getCategories();
-    const pages = [];
-    for (const cat of categories) {
-      const totalPages = Math.ceil(cat.count / 10);
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push({ slug: cat.slug, page: String(i) });
-      }
-    }
-    return pages;
-  } catch {
-    return [];
-  }
+  return [];
 }
 
 export default async function PaginatedCategoryPage({
