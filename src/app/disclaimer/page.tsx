@@ -3,7 +3,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
 export default async function DisclaimerPage() {
-  const categories = await getCategories();
+  const categories = await getCategories().catch(() => []);
 
   const sections = [
     {

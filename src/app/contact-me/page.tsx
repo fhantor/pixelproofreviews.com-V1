@@ -5,7 +5,7 @@ import { Mail, Send, Globe, Bell, Sparkles, Users } from 'lucide-react';
 import { FaTelegram } from 'react-icons/fa6';
 
 export default async function ContactPage() {
-  const categories = await getCategories();
+  const categories = await getCategories().catch(() => []);
 
   const quickConnect = [
     {

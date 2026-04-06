@@ -28,7 +28,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     notFound();
   }
 
-  const categories = await getCategories();
+  const categories = await getCategories().catch(() => []);
   const featuredMedia = post._embedded?.['wp:featuredmedia']?.[0];
 
   return (

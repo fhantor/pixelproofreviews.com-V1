@@ -9,8 +9,12 @@ import Sidebar from '@/components/Sidebar';
 import { decodeHtml, toTitleCase } from '@/lib/utils';
 
 export async function generateStaticParams() {
-  const categories = await getCategories();
-  return categories.map((cat) => ({ slug: cat.slug }));
+  try {
+    const categories = await getCategories();
+    return categories.map((cat) => ({ slug: cat.slug }));
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
@@ -35,9 +39,14 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
     notFound();
   }
 
-  const { posts, pagination } = await getPostsByCategory(category.id, 1);
-  const categories = await getCategories();
-  const { posts: recentPosts } = await getPosts(1);
+  let posts: any[] = [];
+  let pagination = { currentPage: 1, totalPages: 1, totalPosts: 0 };
+  let categories: any[] = [];
+  let recentPosts: any[] = [];
+
+  try { ({ posts, pagination } = await getPostsByCategory(category.id, 1)); } catch { /* API unavailable */ }
+  try { categories = await getCategories(); } catch { /* API unavailable */ }
+  try { ({ posts: recentPosts } = await getPosts(1)); } catch { /* API unavailable */ }
 
   return (
     <div className="min-h-screen flex flex-col bg-background">

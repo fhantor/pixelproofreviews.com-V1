@@ -5,9 +5,13 @@ import Sidebar from '@/components/Sidebar';
 import Link from 'next/link';
 
 export default async function BlogPage() {
-  const { posts } = await getBlogPosts(1);
-  const categories = await getCategories();
-  const { posts: recentPosts } = await getPosts(1);
+  let posts: any[] = [];
+  let categories: any[] = [];
+  let recentPosts: any[] = [];
+
+  try { ({ posts } = await getBlogPosts(1)); } catch { /* API unavailable */ }
+  try { categories = await getCategories(); } catch { /* API unavailable */ }
+  try { ({ posts: recentPosts } = await getPosts(1)); } catch { /* API unavailable */ }
 
   return (
     <div className="min-h-screen flex flex-col">
