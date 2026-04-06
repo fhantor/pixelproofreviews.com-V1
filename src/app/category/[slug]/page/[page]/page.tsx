@@ -8,15 +8,19 @@ import Sidebar from '@/components/Sidebar';
 import { decodeHtml, toTitleCase } from '@/lib/utils';
 
 export async function generateStaticParams() {
-  const categories = await getCategories();
-  const pages = [];
-  for (const cat of categories) {
-    const totalPages = Math.ceil(cat.count / 10);
-    for (let i = 1; i <= totalPages; i++) {
-      pages.push({ slug: cat.slug, page: String(i) });
+  try {
+    const categories = await getCategories();
+    const pages = [];
+    for (const cat of categories) {
+      const totalPages = Math.ceil(cat.count / 10);
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push({ slug: cat.slug, page: String(i) });
+      }
     }
+    return pages;
+  } catch {
+    return [];
   }
-  return pages;
 }
 
 export default async function PaginatedCategoryPage({
@@ -36,11 +40,17 @@ export default async function PaginatedCategoryPage({
     notFound();
   }
 
-  const { posts, pagination } = await getPostsByCategory(category.id, pageNumber);
-  const categories = await getCategories();
-  const { posts: recentPosts } = await getPosts(1);
+  let posts: any[] = [];
+  let pagination = { currentPage: pageNumber, totalPages: pageNumber, totalPosts: 0 };
+  let categories: any[] = [];
+  let recentPosts: any[] = [];
+  let apiSucceeded = false;
 
-  if (pageNumber > pagination.totalPages) notFound();
+  try { ({ posts, pagination } = await getPostsByCategory(category.id, pageNumber)); apiSucceeded = true; } catch { /* API unavailable */ }
+  try { categories = await getCategories(); } catch { /* API unavailable */ }
+  try { ({ posts: recentPosts } = await getPosts(1)); } catch { /* API unavailable */ }
+
+  if (apiSucceeded && pageNumber > pagination.totalPages) notFound();
 
   // Redirect /category/[slug]/page/1 to /category/[slug]
   if (pageNumber === 1) redirect(`/category/${slug}`);

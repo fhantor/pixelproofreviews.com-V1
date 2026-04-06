@@ -15,8 +15,12 @@ import ReadingProgress from '@/components/ReadingProgress';
 import { decodeHtml, toTitleCase } from '@/lib/utils';
 
 export async function generateStaticParams() {
-  const { posts } = await getPosts(1);
-  return posts.map((post) => ({ slug: post.slug }));
+  try {
+    const { posts } = await getPosts(1);
+    return posts.map((post) => ({ slug: post.slug }));
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
