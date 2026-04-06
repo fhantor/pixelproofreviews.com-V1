@@ -120,7 +120,7 @@ export default function Footer() {
             <div className="flex items-center gap-3 mb-3">
               <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-purple-500/50 flex-shrink-0 ring-2 ring-purple-700/30">
                 <Image
-                  src="https://pixelproofreviews.com/wp-content/uploads/2025/05/f7d00a5a-7737-400a-893f-d56c343e1f9b_Original-1-e1758074373992.jpg"
+                  src="https://api.pixelproofreviews.com/wp-content/uploads/2025/05/f7d00a5a-7737-400a-893f-d56c343e1f9b_Original-1-e1758074373992.jpg"
                   alt="Fahim"
                   width={64}
                   height={64}

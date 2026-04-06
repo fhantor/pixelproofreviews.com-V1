@@ -4,7 +4,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'pixelproofreviews.com',
+        hostname: 'api.pixelproofreviews.com',
         pathname: '/wp-content/**',
       },
     ],

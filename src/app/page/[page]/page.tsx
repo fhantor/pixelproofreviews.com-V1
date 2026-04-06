@@ -6,11 +6,15 @@ import PostGrid from '@/components/PostGrid';
 import Sidebar from '@/components/Sidebar';
 
 export async function generateStaticParams() {
-  const { pagination } = await getPosts(1);
-  const totalPages = pagination.totalPages;
-  return Array.from({ length: totalPages }, (_, i) => ({
-    page: String(i + 1),
-  }));
+  try {
+    const { pagination } = await getPosts(1);
+    const totalPages = pagination.totalPages;
+    return Array.from({ length: totalPages }, (_, i) => ({
+      page: String(i + 1),
+    }));
+  } catch {
+    return [];
+  }
 }
 
 export default async function PaginatedHome({
@@ -26,11 +30,36 @@ export default async function PaginatedHome({
 
   if (pageNumber < 1) notFound();
 
-  const { posts, pagination } = await getPosts(pageNumber);
-  const { posts: latestPosts } = await getPosts(1);
-  const categories = await getCategories();
+  let posts: any[] = [];
+  let pagination = { currentPage: pageNumber, totalPages: pageNumber, totalPosts: 0 };
+  let categories: any[] = [];
+  let latestPosts: any[] = [];
+  let apiSucceeded = false;
 
-  if (pageNumber > pagination.totalPages) notFound();
+  try {
+    const result = await getPosts(pageNumber);
+    posts = result.posts;
+    pagination = result.pagination;
+    apiSucceeded = true;
+  } catch {
+    // API unavailable — render empty page
+  }
+
+  try {
+    const result = await getPosts(1);
+    latestPosts = result.posts;
+  } catch {
+    // API unavailable
+  }
+
+  try {
+    categories = await getCategories();
+  } catch {
+    // API unavailable
+  }
+
+  // Only 404 if we got a real response and the page is genuinely out of range
+  if (apiSucceeded && pageNumber > pagination.totalPages) notFound();
 
   return (
     <div className="min-h-screen bg-background">
@@ -49,7 +78,7 @@ export default async function PaginatedHome({
             </div>
             
             <div className="lg:col-span-1">
-              <Sidebar categories={categories} recentPosts={latestPosts} />
+              <Sidebar categories={categories} recentPosts={latestPosts as any} />
             </div>
           </div>
         </div>

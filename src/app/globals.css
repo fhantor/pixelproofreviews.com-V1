@@ -335,6 +335,22 @@
     @apply border border-border px-4 py-2;
   }
 
+  /* Dark mode: override any inline Elementor styles on table cells */
+  .dark .wp-content table th,
+  .dark .wp-content table td {
+    background-color: hsl(var(--muted)) !important;
+    color: hsl(var(--foreground)) !important;
+    border-color: hsl(var(--border)) !important;
+  }
+
+  .dark .wp-content table thead th {
+    background-color: hsl(217.2 32.6% 13%) !important;
+  }
+
+  .dark .wp-content table tr:nth-child(even) td {
+    background-color: hsl(217.2 32.6% 13%) !important;
+  }
+
   /* WordPress Embeds */
   .wp-block-embed,
   .wp-block-embed__wrapper {
@@ -428,6 +444,22 @@
 
   .iframe-wrapper iframe {
     @apply absolute inset-0 w-full h-full rounded-xl;
+  }
+
+  /* Elementor Video Widget — force full-width responsive regardless of inline or open-inline mode */
+  .elementor-widget-video .elementor-widget-container,
+  .elementor-widget-video .elementor-wrapper {
+    display: block !important;
+    width: 100% !important;
+  }
+
+  .elementor-video-iframe,
+  .elementor-widget-video iframe {
+    display: block !important;
+    width: 100% !important;
+    aspect-ratio: 16 / 9 !important;
+    height: auto !important;
+    border-radius: 0.75rem;
   }
 
   /* Article opening title/subtitle styling */

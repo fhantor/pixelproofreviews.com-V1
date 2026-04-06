@@ -74,9 +74,13 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       .replace(/href='\/wp-content\//g, `href='${WP_API_URL}/wp-content/`)
       // Add lazy loading to images (avoid duplicating loading attr)
       .replace(/<img(?![^>]*\bloading\b)([^>]*)>/gi, '<img$1 loading="lazy">')
-      // Wrap ALL iframes (with or without content inside) in responsive container
-      .replace(/<iframe([^>]*)>([\s\S]*?)<\/iframe>/gi,
-        '<div class="relative w-full aspect-video my-6"><iframe$1 class="absolute inset-0 w-full h-full rounded-xl">$2</iframe></div>')
+      // Wrap ALL iframes in responsive container, merging existing class attributes
+      .replace(/<iframe([^>]*)>([\s\S]*?)<\/iframe>/gi, (_match, attrs, content) => {
+        const newAttrs = /\bclass=/i.test(attrs)
+          ? attrs.replace(/\bclass="([^"]*)"/i, 'class="$1 absolute inset-0 w-full h-full"')
+          : `${attrs} class="absolute inset-0 w-full h-full"`;
+        return `<div class="relative w-full aspect-video my-6 rounded-xl overflow-hidden"><iframe${newAttrs}>${content}</iframe></div>`;
+      })
       // Clean up empty paragraphs
       .replace(/<p[^>]*>\s*(&nbsp;)?\s*<\/p>/gi, '')
       // Fix double line breaks
