@@ -6,17 +6,26 @@ const PER_PAGE = 10;
 // Fields needed for post listing/cards — excludes full content to keep responses small
 const LIST_FIELDS = '_fields=id,slug,title,excerpt,date,categories,featured_media,_links';
 
-async function fetchWP<T>(endpoint: string): Promise<{ data: T; headers: Headers }> {
+async function fetchWP<T>(endpoint: string, retries = 3): Promise<{ data: T; headers: Headers }> {
   const url = `${WP_API_URL}/wp-json/wp/v2${endpoint}`;
-  const res = await fetch(url, {
-    next: { revalidate: 300 },
-    headers: {
-      Accept: 'application/json',
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-    },
-  });
-  if (!res.ok) throw new Error(`Failed to fetch ${url}: ${res.statusText}`);
-  return { data: await res.json(), headers: res.headers };
+  let lastError: unknown;
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      const res = await fetch(url, {
+        next: { revalidate: 60 },
+        headers: {
+          Accept: 'application/json',
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        },
+      });
+      if (!res.ok) throw new Error(`Failed to fetch ${url}: ${res.statusText}`);
+      return { data: await res.json(), headers: res.headers };
+    } catch (err) {
+      lastError = err;
+      if (attempt < retries) await new Promise((r) => setTimeout(r, attempt * 1000));
+    }
+  }
+  throw lastError;
 }
 
 function getPagination(headers: Headers): PaginationInfo {
