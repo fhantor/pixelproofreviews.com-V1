@@ -33,7 +33,7 @@ export default function HeroSection() {
 
             <p className="text-lg text-purple-100 leading-relaxed max-w-2xl mx-auto">
               Expert insights on software, themes, plugins, and marketing tools —
-              backed by real-world testing and 12+ years of SEO experience.
+              backed by real-world testing and 12+ years of digital marketing experience.
             </p>
 
             {/* CTA buttons */}

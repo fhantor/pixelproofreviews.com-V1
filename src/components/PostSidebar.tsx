@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Calendar, Search } from 'lucide-react';
+import { Calendar, Search, Sparkles, Bell } from 'lucide-react';
 import { WPPost } from '@/lib/types';
 import { useState } from 'react';
 
@@ -21,7 +21,7 @@ export default function PostSidebar({ recentPosts }: PostSidebarProps) {
   };
 
   return (
-    <aside className="space-y-6 lg:sticky lg:top-24">
+    <aside className="space-y-6">
       {/* Search Box */}
       <div className="bg-white dark:bg-dark-900 rounded-xl border border-dark-100 dark:border-dark-800 p-5">
         <form onSubmit={handleSearch}>
@@ -72,12 +72,50 @@ export default function PostSidebar({ recentPosts }: PostSidebarProps) {
       </div>
 
       {/* Newsletter CTA */}
-      <div className="bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl p-5 text-white">
-        <h3 className="font-semibold text-lg mb-2">Join 5,000+ Readers</h3>
-        <p className="text-purple-100 text-sm mb-3">
-          Get the latest reviews, exclusive deals, and expert tips delivered to your inbox.
-        </p>
-        <p className="text-xs text-purple-200 italic">Newsletter form coming soon</p>
+      <div className="relative rounded-xl border border-purple-200 dark:border-purple-800/50 bg-white dark:bg-dark-900 overflow-hidden">
+        <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-purple-600/10 dark:bg-purple-500/10 blur-2xl pointer-events-none" />
+        <div className="relative p-5">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-800/40 text-purple-700 dark:text-purple-300 text-xs font-semibold mb-3 tracking-wide uppercase">
+            <Sparkles className="w-3 h-3" />
+            Weekly Newsletter
+          </div>
+          <h3 className="text-base font-bold leading-snug mb-1 text-dark-900 dark:text-white" style={{ fontFamily: 'var(--font-space-grotesk)' }}>
+            Stay Ahead of the Curve
+          </h3>
+          <p className="text-sm text-dark-500 dark:text-dark-400 leading-relaxed mb-4">
+            Honest reviews, exclusive deals, and expert tips — every Thursday. No spam, ever.
+          </p>
+          <div className="flex items-center gap-2 mb-4">
+            <div className="flex -space-x-2">
+              {['F', 'A', 'M', 'R'].map((l, i) => (
+                <div key={i} className="w-6 h-6 rounded-full bg-purple-200 dark:bg-purple-700/60 border-2 border-white dark:border-dark-900 flex items-center justify-center text-[9px] font-bold text-purple-700 dark:text-purple-200">
+                  {l}
+                </div>
+              ))}
+            </div>
+            <span className="text-xs text-dark-500 dark:text-dark-400">
+              <span className="font-semibold text-dark-800 dark:text-white">5,000+</span> readers joined
+            </span>
+          </div>
+          <div className="flex gap-2">
+            <input
+              type="email"
+              placeholder="your@email.com"
+              disabled
+              className="flex-1 min-w-0 px-3 py-2 rounded-lg bg-white dark:bg-dark-800 border border-purple-200 dark:border-purple-800/50 text-dark-900 dark:text-dark-100 placeholder:text-dark-400 text-sm focus:outline-none cursor-not-allowed opacity-75"
+            />
+            <button
+              disabled
+              className="flex-shrink-0 inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-purple-600 dark:bg-purple-500 text-white font-semibold text-sm cursor-not-allowed opacity-60"
+            >
+              <Bell className="w-3.5 h-3.5" />
+              Subscribe
+            </button>
+          </div>
+          <p className="text-[11px] text-dark-400 dark:text-dark-500 mt-2 text-center">
+            Coming soon · Unsubscribe anytime
+          </p>
+        </div>
       </div>
     </aside>
   );

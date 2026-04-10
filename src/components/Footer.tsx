@@ -57,7 +57,7 @@ export default function Footer() {
                 </span>
               </Link>
               <p className="text-purple-300/80 text-sm leading-relaxed max-w-sm">
-                Honest, in-depth reviews of digital tools, software, themes, plugins, and marketing solutions — backed by real-world testing and 12+ years of SEO expertise.
+                Honest, in-depth reviews of digital tools, software, themes, plugins, and marketing solutions — backed by real-world testing and 12+ years of digital marketing expertise.
               </p>
             </div>
 
@@ -133,7 +133,7 @@ export default function Footer() {
               </div>
             </div>
             <p className="text-purple-300/70 text-xs leading-relaxed mb-4">
-              12+ years in SEO. I test and evaluate software with a team of four reviewers so you don't have to guess.
+              12+ years in digital marketing. I test and evaluate software with a team of four reviewers so you don't have to guess.
             </p>
             <div className="flex gap-2">
               <a
