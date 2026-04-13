@@ -11,9 +11,9 @@ export default function AuthorBio({ className = '' }: AuthorBioProps) {
       <div className="flex items-start gap-4">
         <div className="flex-1">
           <h3 className="font-semibold text-lg text-dark-900 dark:text-white">Fahim</h3>
-          <p className="text-sm text-purple-600 dark:text-purple-400 font-medium mb-2">Digital Marketing & SEO Expert</p>
+          <p className="text-sm text-purple-600 dark:text-purple-400 font-medium mb-2">Digital Marketer</p>
           <p className="text-sm text-dark-500 dark:text-dark-400 leading-relaxed mb-3">
-            SEO specialist with 12+ years of experience. Together with my team of four reviewers, I test and evaluate software and digital products to help you make informed decisions.
+            Digital marketer with 12+ years of experience. Together with my team of four reviewers, I test and evaluate software and digital products to help you make informed decisions.
           </p>
           <div className="flex items-center gap-2">
             <a
