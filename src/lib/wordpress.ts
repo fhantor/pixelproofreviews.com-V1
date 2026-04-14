@@ -6,7 +6,7 @@ const PER_PAGE = 10;
 // Fields needed for post listing/cards — excludes full content to keep responses small
 const LIST_FIELDS = '_fields=id,slug,title,excerpt,date,categories,featured_media,_links';
 
-async function fetchWP<T>(endpoint: string, retries = 3): Promise<{ data: T; headers: Headers }> {
+async function fetchWP<T>(endpoint: string, retries = 2): Promise<{ data: T; headers: Headers }> {
   const url = `${WP_API_URL}/wp-json/wp/v2${endpoint}`;
   let lastError: unknown;
   for (let attempt = 1; attempt <= retries; attempt++) {
@@ -22,7 +22,7 @@ async function fetchWP<T>(endpoint: string, retries = 3): Promise<{ data: T; hea
       return { data: await res.json(), headers: res.headers };
     } catch (err) {
       lastError = err;
-      if (attempt < retries) await new Promise((r) => setTimeout(r, attempt * 1000));
+      if (attempt < retries) await new Promise((r) => setTimeout(r, 500));
     }
   }
   throw lastError;
@@ -33,9 +33,14 @@ type MediaInfo = { source_url: string; alt_text: string };
 async function fetchMediaMap(ids: number[]): Promise<Record<number, MediaInfo>> {
   if (!ids.length) return {};
   try {
-    const { data } = await fetchWP<Array<{ id: number; source_url: string; alt_text: string }>>(
-      `/media?include=${ids.join(',')}&_fields=id,source_url,alt_text&per_page=100`
-    );
+    // Single attempt, no retries — media is non-critical; a miss just means no image
+    const url = `${WP_API_URL}/wp-json/wp/v2/media?include=${ids.join(',')}&_fields=id,source_url,alt_text&per_page=100`;
+    const res = await fetch(url, {
+      next: { revalidate: 3600 },
+      headers: { Accept: 'application/json' },
+    });
+    if (!res.ok) return {};
+    const data: Array<{ id: number; source_url: string; alt_text: string }> = await res.json();
     return Object.fromEntries(data.map((m) => [m.id, { source_url: m.source_url, alt_text: m.alt_text || '' }]));
   } catch {
     return {};
