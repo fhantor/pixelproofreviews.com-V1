@@ -1,6 +1,6 @@
 import { WPPost, WPCategory, WPTag, WPPage, PaginationInfo } from './types';
 
-const WP_API_URL = process.env.WORDPRESS_API_URL || 'https://pixelproofreviews.com';
+const WP_API_URL = process.env.WORDPRESS_API_URL || 'https://api.pixelproofreviews.com';
 const PER_PAGE = 10;
 
 // Fields needed for post listing/cards — excludes full content to keep responses small
@@ -28,6 +28,34 @@ async function fetchWP<T>(endpoint: string, retries = 3): Promise<{ data: T; hea
   throw lastError;
 }
 
+type MediaInfo = { source_url: string; alt_text: string };
+
+async function fetchMediaMap(ids: number[]): Promise<Record<number, MediaInfo>> {
+  if (!ids.length) return {};
+  try {
+    const { data } = await fetchWP<Array<{ id: number; source_url: string; alt_text: string }>>(
+      `/media?include=${ids.join(',')}&_fields=id,source_url,alt_text&per_page=100`
+    );
+    return Object.fromEntries(data.map((m) => [m.id, { source_url: m.source_url, alt_text: m.alt_text || '' }]));
+  } catch {
+    return {};
+  }
+}
+
+function attachMedia(posts: WPPost[], mediaMap: Record<number, MediaInfo>): WPPost[] {
+  return posts.map((post) => {
+    const media = post.featured_media ? mediaMap[post.featured_media] : undefined;
+    if (!media) return post;
+    return {
+      ...post,
+      _embedded: {
+        ...post._embedded,
+        'wp:featuredmedia': [{ source_url: media.source_url, alt_text: media.alt_text }],
+      },
+    };
+  });
+}
+
 function getPagination(headers: Headers): PaginationInfo {
   return {
     currentPage: parseInt(headers.get('x-wp-currentpage') || '1', 10),
@@ -38,32 +66,42 @@ function getPagination(headers: Headers): PaginationInfo {
 
 export async function getPosts(page = 1): Promise<{ posts: WPPost[]; pagination: PaginationInfo }> {
   const { data, headers } = await fetchWP<WPPost[]>(
-    `/posts?per_page=${PER_PAGE}&page=${page}&_embed=true&${LIST_FIELDS}`
+    `/posts?per_page=${PER_PAGE}&page=${page}&${LIST_FIELDS}`
   );
-  return { posts: data as WPPost[], pagination: getPagination(headers) };
+  const ids = (data as WPPost[]).map((p) => p.featured_media).filter(Boolean) as number[];
+  const mediaMap = await fetchMediaMap(ids);
+  return { posts: attachMedia(data as WPPost[], mediaMap), pagination: getPagination(headers) };
 }
 
 export async function getPostBySlug(slug: string): Promise<WPPost> {
-  const { data } = await fetchWP<WPPost[]>(
-    `/posts?slug=${slug}&_embed=true`
-  );
+  const { data } = await fetchWP<WPPost[]>(`/posts?slug=${slug}`);
   if (!(data as WPPost[]).length) throw new Error(`Post not found: ${slug}`);
-  return (data as WPPost[])[0];
+  const post = (data as WPPost[])[0];
+  if (post.featured_media) {
+    const mediaMap = await fetchMediaMap([post.featured_media]);
+    return attachMedia([post], mediaMap)[0];
+  }
+  return post;
 }
 
 export async function getBlogPosts(page = 1): Promise<{ posts: WPPost[]; pagination: PaginationInfo }> {
   const { data, headers } = await fetchWP<WPPost[]>(
-    `/blog?per_page=${PER_PAGE}&page=${page}&_embed=true&${LIST_FIELDS}`
+    `/blog?per_page=${PER_PAGE}&page=${page}&${LIST_FIELDS}`
   );
-  return { posts: data as WPPost[], pagination: getPagination(headers) };
+  const ids = (data as WPPost[]).map((p) => p.featured_media).filter(Boolean) as number[];
+  const mediaMap = await fetchMediaMap(ids);
+  return { posts: attachMedia(data as WPPost[], mediaMap), pagination: getPagination(headers) };
 }
 
 export async function getBlogPostBySlug(slug: string): Promise<WPPost> {
-  const { data } = await fetchWP<WPPost[]>(
-    `/blog?slug=${slug}&_embed=true`
-  );
+  const { data } = await fetchWP<WPPost[]>(`/blog?slug=${slug}`);
   if (!(data as WPPost[]).length) throw new Error(`Blog post not found: ${slug}`);
-  return (data as WPPost[])[0];
+  const post = (data as WPPost[])[0];
+  if (post.featured_media) {
+    const mediaMap = await fetchMediaMap([post.featured_media]);
+    return attachMedia([post], mediaMap)[0];
+  }
+  return post;
 }
 
 export async function getCategories(): Promise<WPCategory[]> {
@@ -79,9 +117,11 @@ export async function getCategoryBySlug(slug: string): Promise<WPCategory> {
 
 export async function getPostsByCategory(categoryId: number, page = 1): Promise<{ posts: WPPost[]; pagination: PaginationInfo }> {
   const { data, headers } = await fetchWP<WPPost[]>(
-    `/posts?categories=${categoryId}&per_page=${PER_PAGE}&page=${page}&_embed=true&${LIST_FIELDS}`
+    `/posts?categories=${categoryId}&per_page=${PER_PAGE}&page=${page}&${LIST_FIELDS}`
   );
-  return { posts: data as WPPost[], pagination: getPagination(headers) };
+  const ids = (data as WPPost[]).map((p) => p.featured_media).filter(Boolean) as number[];
+  const mediaMap = await fetchMediaMap(ids);
+  return { posts: attachMedia(data as WPPost[], mediaMap), pagination: getPagination(headers) };
 }
 
 export async function getTags(): Promise<WPTag[]> {
@@ -90,12 +130,14 @@ export async function getTags(): Promise<WPTag[]> {
 }
 
 export async function getPageBySlug(slug: string): Promise<WPPage> {
-  const { data } = await fetchWP<WPPage[]>(`/pages?slug=${slug}&_embed=true`);
+  const { data } = await fetchWP<WPPage[]>(`/pages?slug=${slug}`);
   if (!data.length) throw new Error(`Page not found: ${slug}`);
   return data[0];
 }
 
 export async function searchPosts(query: string): Promise<WPPost[]> {
-  const { data } = await fetchWP<WPPost[]>(`/posts?search=${encodeURIComponent(query)}&per_page=10&_embed=true&${LIST_FIELDS}`);
-  return data as WPPost[];
+  const { data } = await fetchWP<WPPost[]>(`/posts?search=${encodeURIComponent(query)}&per_page=10&${LIST_FIELDS}`);
+  const ids = (data as WPPost[]).map((p) => p.featured_media).filter(Boolean) as number[];
+  const mediaMap = await fetchMediaMap(ids);
+  return attachMedia(data as WPPost[], mediaMap);
 }

@@ -49,6 +49,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
   const categories = await getCategories();
   const { posts: recentPosts } = await getPosts(1);
+  const postCategory = post.categories?.length ? categories.find((c) => post.categories.includes(c.id)) : null;
   const relatedPosts = recentPosts
     .filter((p) => p.id !== post.id && p.categories?.some((c) => post.categories?.includes(c)))
     .slice(0, 3);
@@ -123,14 +124,14 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
                 <Home className="w-3.5 h-3.5" />
                 <span>Home</span>
               </Link>
-              {post.categories?.length > 0 && post._embedded?.['wp:term']?.[0] && (
+              {postCategory && (
                 <>
                   <ChevronRight className="w-3.5 h-3.5 text-dark-300 dark:text-dark-600 flex-shrink-0" />
                   <Link
-                    href={`/category/${(post._embedded['wp:term'][0] as any[])[0]?.slug || ''}`}
+                    href={`/category/${postCategory.slug}`}
                     className="text-dark-500 dark:text-dark-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
                   >
-                    {toTitleCase(decodeHtml((post._embedded['wp:term'][0] as any[])?.[0]?.name || ''))}
+                    {toTitleCase(decodeHtml(postCategory.name))}
                   </Link>
                 </>
               )}

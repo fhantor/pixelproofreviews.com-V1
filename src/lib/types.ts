@@ -13,7 +13,7 @@ export interface WPPost {
   _embedded?: {
     'wp:featuredmedia'?: Array<{
       source_url: string;
-      media_details: {
+      media_details?: {
         sizes: {
           thumbnail: { source_url: string; width: number; height: number };
           medium: { source_url: string; width: number; height: number };
