@@ -16,7 +16,7 @@ interface WPComment {
 }
 
 export default function Comments({ postId }: CommentsProps) {
-  const WP_API_URL = process.env.WORDPRESS_API_URL || 'https://pixelproofreviews.com';
+  const WP_API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL || 'https://api.pixelproofreviews.com';
   const WP_SITE_URL = WP_API_URL.replace('/wp-json/wp/v2', '');
   
   const [comments, setComments] = useState<WPComment[]>([]);

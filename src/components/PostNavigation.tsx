@@ -15,7 +15,12 @@ function getCategoryName(post: WPPost, categories: WPCategory[]): string {
 }
 
 export default async function PostNavigation({ post, categories }: PostNavigationProps) {
-  const allPosts = await fetchAllPosts();
+  let allPosts: WPPost[] = [];
+  try {
+    allPosts = await fetchAllPosts();
+  } catch {
+    return null;
+  }
   const currentIndex = allPosts.findIndex((p) => p.id === post.id);
   
   const prevPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null;
@@ -75,7 +80,7 @@ export default async function PostNavigation({ post, categories }: PostNavigatio
 }
 
 async function fetchAllPosts() {
-  const WP_API_URL = process.env.WORDPRESS_API_URL || 'https://pixelproofreviews.com';
+  const WP_API_URL = process.env.WORDPRESS_API_URL || 'https://api.pixelproofreviews.com';
   const allPosts: WPPost[] = [];
   let page = 1;
   let hasMore = true;

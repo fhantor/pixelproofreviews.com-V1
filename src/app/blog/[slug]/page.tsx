@@ -48,7 +48,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const title = decodeHtml(post.title.rendered.replace(/<[^>]*>/g, ''));
   const readTime = Math.max(1, Math.ceil(post.content.rendered.replace(/<[^>]*>/g, '').split(/\s+/).length / 200));
 
-  const WP_API_URL = process.env.WORDPRESS_API_URL || 'https://pixelproofreviews.com';
+  const WP_API_URL = process.env.WORDPRESS_API_URL || 'https://api.pixelproofreviews.com';
 
   function enhanceContent(html: string): string {
     return html

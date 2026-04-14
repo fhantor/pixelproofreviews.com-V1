@@ -47,8 +47,8 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
     notFound();
   }
 
-  const categories = await getCategories();
-  const { posts: recentPosts } = await getPosts(1);
+  const categories = await getCategories().catch(() => []);
+  const { posts: recentPosts } = await getPosts(1).catch(() => ({ posts: [], pagination: { currentPage: 1, totalPages: 1, totalPosts: 0 } }));
   const postCategory = post.categories?.length ? categories.find((c) => post.categories.includes(c.id)) : null;
   const relatedPosts = recentPosts
     .filter((p) => p.id !== post.id && p.categories?.some((c) => post.categories?.includes(c)))
@@ -56,7 +56,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
   const readTime = Math.max(1, Math.ceil(post.content.rendered.replace(/<[^>]*>/g, '').split(/\s+/).length / 200));
 
-  const WP_API_URL = process.env.WORDPRESS_API_URL || 'https://pixelproofreviews.com';
+  const WP_API_URL = process.env.WORDPRESS_API_URL || 'https://api.pixelproofreviews.com';
 
   // Enhance content: fix URLs, add lazy loading, wrap iframes
   function enhanceContent(html: string): string {
