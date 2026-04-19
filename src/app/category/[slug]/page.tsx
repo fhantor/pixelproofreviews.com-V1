@@ -1,4 +1,5 @@
 import { getCategories, getCategoryBySlug, getPostsByCategory, getPosts } from '@/lib/wordpress';
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ChevronRight, Home } from 'lucide-react';
@@ -20,6 +21,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     return {
       title: `${toTitleCase(decodeHtml(category.name))} Reviews - Pixel Proof Reviews`,
       description: `Browse all ${toTitleCase(decodeHtml(category.name))} reviews on Pixel Proof Reviews.`,
+      alternates: {
+        canonical: `/category/${slug}`,
+      },
     };
   } catch {
     return { title: 'Category Not Found' };
