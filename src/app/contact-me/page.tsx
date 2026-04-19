@@ -3,6 +3,13 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Mail, Send, Globe, Bell, Sparkles, Users } from 'lucide-react';
 import { FaTelegram } from 'react-icons/fa6';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: '/contact-me',
+  },
+};
 
 export default async function ContactPage() {
   const categories = await getCategories().catch(() => []);
