@@ -1,4 +1,5 @@
 import { getCategories, getCategoryBySlug, getPostsByCategory, getPosts } from '@/lib/wordpress';
+import type { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
 import Header from '@/components/Header';
@@ -10,6 +11,15 @@ import { decodeHtml, toTitleCase } from '@/lib/utils';
 // Don't pre-generate at build time — pages are generated on-demand via ISR
 export async function generateStaticParams() {
   return [];
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string; page: string }> }) {
+  const { slug, page } = await params;
+  return {
+    alternates: {
+      canonical: `/category/${slug}/page/${page}`,
+    },
+  };
 }
 
 export default async function PaginatedCategoryPage({

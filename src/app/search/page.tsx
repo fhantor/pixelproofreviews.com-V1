@@ -1,10 +1,21 @@
 import { searchPosts, getCategories } from '@/lib/wordpress';
+import type { Metadata } from 'next';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import PostCard from '@/components/PostCard';
 import { Search } from 'lucide-react';
 import Link from 'next/link';
 import { WPPost } from '@/lib/types';
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: '/search',
+  },
+  robots: {
+    index: false,
+    follow: true,
+  },
+};
 
 export default async function SearchPage({
   searchParams,

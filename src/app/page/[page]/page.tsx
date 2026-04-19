@@ -1,4 +1,5 @@
 import { getPosts, getCategories } from '@/lib/wordpress';
+import type { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -8,6 +9,15 @@ import Sidebar from '@/components/Sidebar';
 // Don't pre-generate at build time — pages are generated on-demand via ISR
 export async function generateStaticParams() {
   return [];
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ page: string }> }) {
+  const { page } = await params;
+  return {
+    alternates: {
+      canonical: `/page/${page}`,
+    },
+  };
 }
 
 export default async function PaginatedHome({

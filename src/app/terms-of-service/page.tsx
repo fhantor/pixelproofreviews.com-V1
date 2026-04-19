@@ -2,6 +2,12 @@ import { getCategories } from '@/lib/wordpress';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
+export const metadata: Metadata = {
+  alternates: {
+    canonical: '/terms-of-service',
+  },
+};
+
 export default async function TermsOfServicePage() {
   const categories = await getCategories().catch(() => []);
 

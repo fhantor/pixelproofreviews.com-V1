@@ -1,4 +1,6 @@
 import { getPostBySlug, getCategories, getPosts } from '@/lib/wordpress';
+import type { Metadata } from 'next';
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ChevronRight, Home, Calendar, User, Clock } from 'lucide-react';
@@ -27,6 +29,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     return {
       title: yoast?.title || decodeHtml(post.title.rendered.replace(/<[^>]*>/g, '')),
       description: yoast?.description || post.excerpt.rendered.replace(/<[^>]*>/g, '').slice(0, 160),
+      alternates: {
+        canonical: `/${slug}`,
+      },
       openGraph: yoast?.og_image?.[0]
         ? {
             images: [{ url: yoast.og_image[0].url, width: yoast.og_image[0].width, height: yoast.og_image[0].height }],

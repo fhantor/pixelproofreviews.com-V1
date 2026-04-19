@@ -1,4 +1,5 @@
 import { getBlogPosts, getCategories, getPosts } from '@/lib/wordpress';
+import type { Metadata } from 'next';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Sidebar from '@/components/Sidebar';
@@ -9,6 +10,12 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { WPPost, WPCategory, PaginationInfo } from '@/lib/types';
 import { decodeHtml } from '@/lib/utils';
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: '/blog',
+  },
+};
 
 function BlogCard({ post }: { post: WPPost }) {
   const featuredMedia = post._embedded?.['wp:featuredmedia']?.[0];

@@ -1,4 +1,5 @@
 import { getPosts, getCategories } from '@/lib/wordpress';
+import type { Metadata } from 'next';
 import type { WPPost, WPCategory, PaginationInfo } from '@/lib/types';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -6,6 +7,12 @@ import HeroSection from '@/components/HeroSection';
 import FeaturedReview from '@/components/FeaturedReview';
 import PostGrid from '@/components/PostGrid';
 import Sidebar from '@/components/Sidebar';
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: '/',
+  },
+};
 
 const POSTS_PER_PAGE = 10;
 const CAROUSEL_POSTS = 5;
