@@ -11,7 +11,7 @@ const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-space
 export const metadata: Metadata = {
   title: 'Pixel Proof Reviews — Reviewing Products and Sharing Exclusive Offers',
   description: 'Detailed, unbiased reviews of digital tools and software, backed by hands-on experience and 12+ years of SEO expertise.',
-  metadataBase: new URL('https://pixelproofreviews.com'),
+  metadataBase: new URL('https://www.pixelproofreviews.com'),
   alternates: {
     canonical: '/',
   },
@@ -25,19 +25,19 @@ const websiteSchema = {
   '@graph': [
     {
       '@type': 'WebSite',
-      '@id': 'https://pixelproofreviews.com/#website',
-      url: 'https://pixelproofreviews.com',
+      '@id': 'https://www.pixelproofreviews.com/#website',
+      url: 'https://www.pixelproofreviews.com',
       name: 'Pixel Proof Reviews',
       description: 'Reviewing Products and Sharing Exclusive Offers',
       inLanguage: 'en-US',
       publisher: {
         '@type': 'Organization',
-        '@id': 'https://pixelproofreviews.com/#organization',
+        '@id': 'https://www.pixelproofreviews.com/#organization',
         name: 'Pixel Proof Reviews',
-        url: 'https://pixelproofreviews.com',
+        url: 'https://www.pixelproofreviews.com',
         logo: {
           '@type': 'ImageObject',
-          url: 'https://pixelproofreviews.com/favicon.svg',
+          url: 'https://www.pixelproofreviews.com/favicon.svg',
         },
       },
       potentialAction: [
@@ -45,7 +45,7 @@ const websiteSchema = {
           '@type': 'SearchAction',
           target: {
             '@type': 'EntryPoint',
-            urlTemplate: 'https://pixelproofreviews.com/search?q={search_term_string}',
+            urlTemplate: 'https://www.pixelproofreviews.com/search?q={search_term_string}',
           },
           'query-input': {
             '@type': 'PropertyValueSpecification',
@@ -56,12 +56,12 @@ const websiteSchema = {
     },
     {
       '@type': 'Organization',
-      '@id': 'https://pixelproofreviews.com/#organization',
+      '@id': 'https://www.pixelproofreviews.com/#organization',
       name: 'Pixel Proof Reviews',
-      url: 'https://pixelproofreviews.com',
+      url: 'https://www.pixelproofreviews.com',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://pixelproofreviews.com/favicon.svg',
+        url: 'https://www.pixelproofreviews.com/favicon.svg',
       },
       sameAs: [
         'https://t.me/fhantor',
