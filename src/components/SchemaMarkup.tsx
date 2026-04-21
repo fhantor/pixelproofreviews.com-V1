@@ -2,12 +2,12 @@ import type { YoastHeadJson } from '@/lib/types';
 
 interface SchemaMarkupProps {
   yoastSchema?: YoastHeadJson['schema'];
-  url: string; // pixelproofreviews.com/{slug} or pixelproofreviews.com/blog/{slug}
+  url: string; // www.pixelproofreviews.com/{slug} or www.pixelproofreviews.com/blog/{slug}
 }
 
 /**
  * Render Yoast schema.org JSON-LD with hostname swapped
- * from api.pixelproofreviews.com to pixelproofreviews.com.
+ * from api.pixelproofreviews.com to www.pixelproofreviews.com.
  * Falls back to minimal WebSite/Article schema if no Yoast data.
  */
 export default function SchemaMarkup({ yoastSchema, url }: SchemaMarkupProps) {
@@ -16,7 +16,7 @@ export default function SchemaMarkup({ yoastSchema, url }: SchemaMarkupProps) {
   if (yoastSchema) {
     // Deep clone and replace all api. domain refs
     const json = JSON.stringify(yoastSchema);
-    schema = JSON.parse(json.replace(/https:\/\/api\.pixelproofreviews\.com/g, 'https://pixelproofreviews.com'));
+    schema = JSON.parse(json.replace(/https:\/\/api\.pixelproofreviews\.com/g, 'https://www.pixelproofreviews.com'));
   } else {
     // Fallback minimal schema
     schema = {
