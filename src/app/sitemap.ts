@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next';
 
-const BASE_URL = 'https://pixelproofreviews.com';
+const BASE_URL = 'https://www.pixelproofreviews.com';
 const WP_API = process.env.WORDPRESS_API_URL || 'https://api.pixelproofreviews.com';
 
 async function fetchAll<T>(endpoint: string): Promise<T[]> {

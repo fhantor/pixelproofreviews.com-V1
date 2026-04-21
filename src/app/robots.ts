@@ -6,7 +6,7 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: '*',
       allow: '/',
     },
-    sitemap: 'https://pixelproofreviews.com/sitemap.xml',
-    host: 'https://pixelproofreviews.com',
+    sitemap: 'https://www.pixelproofreviews.com/sitemap.xml',
+    host: 'https://www.pixelproofreviews.com',
   };
 }
