@@ -10,6 +10,7 @@ import ReadingProgress from '@/components/ReadingProgress';
 import TableOfContents from '@/components/TableOfContents';
 import AuthorBio from '@/components/AuthorBio';
 import PostSidebar from '@/components/PostSidebar';
+import SchemaMarkup from '@/components/SchemaMarkup';
 import { decodeHtml } from '@/lib/utils';
 
 export async function generateStaticParams() {
@@ -53,6 +54,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const readTime = Math.max(1, Math.ceil(post.content.rendered.replace(/<[^>]*>/g, '').split(/\s+/).length / 200));
 
   const WP_API_URL = process.env.WORDPRESS_API_URL || 'https://api.pixelproofreviews.com';
+  const canonicalUrl = `https://pixelproofreviews.com/blog/${slug}`;
 
   function enhanceContent(html: string): string {
     return html
@@ -90,6 +92,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     <div className="min-h-screen flex flex-col bg-background">
       <ReadingProgress />
       <Header categories={categories} />
+
+      <SchemaMarkup yoastSchema={post.yoast_head_json?.schema} url={canonicalUrl} />
 
       {/* Breadcrumb */}
       <div className="bg-purple-50 dark:bg-purple-900/10 border-b border-purple-100 dark:border-purple-900/20">
