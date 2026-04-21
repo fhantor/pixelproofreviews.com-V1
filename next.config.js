@@ -7,6 +7,11 @@ const nextConfig = {
         hostname: 'api.pixelproofreviews.com',
         pathname: '/wp-content/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'www.pixelproofreviews.com',
+        pathname: '/wp-content/**',
+      },
     ],
     unoptimized: true,
   },
