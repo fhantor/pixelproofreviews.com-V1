@@ -44,14 +44,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         height: yoast.og_image[0].height,
       };
     } else {
-      // Fallback: WordPress featured media via _embedded
+      // Fallback: WordPress featured media via _embedded (only source_url is guaranteed)
       const featured = post._embedded?.['wp:featuredmedia']?.[0];
       if (featured?.source_url) {
-        ogImage = {
-          url: fixImgUrl(featured.source_url)!,
-          width: featured.media_details?.width,
-          height: featured.media_details?.height,
-        };
+        ogImage = { url: fixImgUrl(featured.source_url)! };
       }
     }
 
