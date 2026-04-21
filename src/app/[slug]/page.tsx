@@ -62,7 +62,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const readTime = Math.max(1, Math.ceil(post.content.rendered.replace(/<[^>]*>/g, '').split(/\s+/).length / 200));
 
   const WP_API_URL = process.env.WORDPRESS_API_URL || 'https://api.pixelproofreviews.com';
-  const canonicalUrl = `https://pixelproofreviews.com/${slug}`;
+  const canonicalUrl = `https://www.pixelproofreviews.com/${slug}`;
 
   // Enhance content: fix URLs, add lazy loading, wrap iframes
   function enhanceContent(html: string): string {
