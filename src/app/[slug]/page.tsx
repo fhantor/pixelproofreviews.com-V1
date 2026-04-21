@@ -13,6 +13,7 @@ import PostNavigation from '@/components/PostNavigation';
 import RelatedPosts from '@/components/RelatedPosts';
 import Comments from '@/components/Comments';
 import ReadingProgress from '@/components/ReadingProgress';
+import SchemaMarkup from '@/components/SchemaMarkup';
 import { decodeHtml, toTitleCase } from '@/lib/utils';
 
 // Don't pre-generate at build time — pages are generated on-demand via ISR
@@ -61,6 +62,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const readTime = Math.max(1, Math.ceil(post.content.rendered.replace(/<[^>]*>/g, '').split(/\s+/).length / 200));
 
   const WP_API_URL = process.env.WORDPRESS_API_URL || 'https://api.pixelproofreviews.com';
+  const canonicalUrl = `https://pixelproofreviews.com/${slug}`;
 
   // Enhance content: fix URLs, add lazy loading, wrap iframes
   function enhanceContent(html: string): string {
@@ -118,6 +120,8 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
     <div className="min-h-screen flex flex-col bg-background">
       <ReadingProgress />
       <Header categories={categories} />
+
+      <SchemaMarkup yoastSchema={post.yoast_head_json?.schema} url={canonicalUrl} />
 
       <main className="flex-1">
         {/* Breadcrumb */}
