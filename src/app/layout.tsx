@@ -20,6 +20,56 @@ export const metadata: Metadata = {
   },
 };
 
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': 'https://pixelproofreviews.com/#website',
+      url: 'https://pixelproofreviews.com',
+      name: 'Pixel Proof Reviews',
+      description: 'Reviewing Products and Sharing Exclusive Offers',
+      inLanguage: 'en-US',
+      publisher: {
+        '@type': 'Organization',
+        '@id': 'https://pixelproofreviews.com/#organization',
+        name: 'Pixel Proof Reviews',
+        url: 'https://pixelproofreviews.com',
+        logo: {
+          '@type': 'ImageObject',
+          url: 'https://pixelproofreviews.com/favicon.svg',
+        },
+      },
+      potentialAction: [
+        {
+          '@type': 'SearchAction',
+          target: {
+            '@type': 'EntryPoint',
+            urlTemplate: 'https://pixelproofreviews.com/search?q={search_term_string}',
+          },
+          'query-input': {
+            '@type': 'PropertyValueSpecification',
+            valueName: 'search_term_string',
+          },
+        },
+      ],
+    },
+    {
+      '@type': 'Organization',
+      '@id': 'https://pixelproofreviews.com/#organization',
+      name: 'Pixel Proof Reviews',
+      url: 'https://pixelproofreviews.com',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://pixelproofreviews.com/favicon.svg',
+      },
+      sameAs: [
+        'https://t.me/fhantor',
+      ],
+    },
+  ],
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -27,6 +77,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+        />
+      </head>
       <body className={`${inter.variable} ${plusJakarta.variable} ${spaceGrotesk.variable} font-sans antialiased`}>
         <ThemeProvider>
           {children}
