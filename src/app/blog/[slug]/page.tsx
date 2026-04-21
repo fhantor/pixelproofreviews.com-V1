@@ -17,30 +17,44 @@ export async function generateStaticParams() {
   return [];
 }
 
+const SITE_URL = 'https://www.pixelproofreviews.com';
+
+function fixImgUrl(url: string | undefined): string | undefined {
+  return url?.replace('https://api.pixelproofreviews.com', SITE_URL);
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   try {
     const post = await getBlogPostBySlug(slug);
     const yoast = post.yoast_head_json;
-    const canonicalUrl = `https://www.pixelproofreviews.com/blog/${slug}`;
+    const canonicalUrl = `${SITE_URL}/blog/${slug}`;
+    let ogImage = yoast?.og_image?.[0]
+      ? {
+          url: fixImgUrl(yoast.og_image[0].url)!,
+          width: yoast.og_image[0].width,
+          height: yoast.og_image[0].height,
+        }
+      : undefined;
+
     return {
       title: yoast?.title || decodeHtml(post.title.rendered.replace(/<[^>]*>/g, '')),
       description: yoast?.description || post.excerpt.rendered.replace(/<[^>]*>/g, '').slice(0, 160),
       alternates: {
         canonical: canonicalUrl,
       },
-      openGraph: yoast?.og_image?.[0]
-        ? {
-            url: canonicalUrl,
-            title: yoast.og_title || yoast.title,
-            description: yoast.og_description || yoast.description,
-            images: [{ url: yoast.og_image[0].url, width: yoast.og_image[0].width, height: yoast.og_image[0].height }],
-          }
-        : {
-            url: canonicalUrl,
-            title: yoast?.og_title || yoast?.title || decodeHtml(post.title.rendered.replace(/<[^>]*>/g, '')),
-            description: yoast?.og_description || yoast?.description || post.excerpt.rendered.replace(/<[^>]*>/g, '').slice(0, 160),
-          },
+      openGraph: {
+        url: canonicalUrl,
+        title: yoast?.og_title || yoast?.title || decodeHtml(post.title.rendered.replace(/<[^>]*>/g, '')),
+        description: yoast?.og_description || yoast?.description || post.excerpt.rendered.replace(/<[^>]*>/g, '').slice(0, 160),
+        images: ogImage ? [ogImage] : undefined,
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: yoast?.og_title || yoast?.title || decodeHtml(post.title.rendered.replace(/<[^>]*>/g, '')),
+        description: yoast?.og_description || yoast?.description || post.excerpt.rendered.replace(/<[^>]*>/g, '').slice(0, 160),
+        images: ogImage ? [ogImage.url] : undefined,
+      },
     };
   } catch {
     return { title: 'Blog Post Not Found' };
@@ -64,7 +78,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const readTime = Math.max(1, Math.ceil(post.content.rendered.replace(/<[^>]*>/g, '').split(/\s+/).length / 200));
 
   const WP_API_URL = process.env.WORDPRESS_API_URL || 'https://api.pixelproofreviews.com';
-  const canonicalUrl = `https://www.pixelproofreviews.com/blog/${slug}`;
+  const canonicalUrl = `${SITE_URL}/blog/${slug}`;
 
   function enhanceContent(html: string): string {
     return html
@@ -80,7 +94,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         const newAttrs = /\bclass=/i.test(attrs)
           ? attrs.replace(/\bclass="([^"]*)"/i, 'class="$1 absolute inset-0 w-full h-full"')
           : `${attrs} class="absolute inset-0 w-full h-full"`;
-        return `<div class="relative w-full aspect-video my-6 rounded-xl overflow-hidden"><iframe${newAttrs}>${content}</iframe></div>`;
+        return `<div class="relative w-full aspect-video my-6 rounded-xl overflow-hidden"><iframe${newAttrs}>${content}<\/iframe><\/div>`;
       })
       .replace(/<p[^>]*>\s*(&nbsp;)?\s*<\/p>/gi, '')
       .replace(/<br\s*\/?>\s*<br\s*\/?>/gi, '<br>');
@@ -94,7 +108,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       const id = `heading-${headings.length}`;
       const text = content.replace(/<[^>]*>/g, '').trim();
       headings.push({ id, text, level: tag === 'h2' ? 2 : 3 });
-      return `<${tag} id="${id}">${content}</${tag}>`;
+      return `<${tag} id="${id}">${content}<\/${tag}>`;
     }
   );
 
