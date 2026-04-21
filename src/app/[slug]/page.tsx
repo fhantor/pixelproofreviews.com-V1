@@ -34,13 +34,26 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const post = await getPostBySlug(slug);
     const yoast = post.yoast_head_json;
     const canonicalUrl = `${SITE_URL}/${slug}`;
-    let ogImage = yoast?.og_image?.[0]
-      ? {
-          url: fixImgUrl(yoast.og_image[0].url)!,
-          width: yoast.og_image[0].width,
-          height: yoast.og_image[0].height,
-        }
-      : undefined;
+
+    // OG image: prefer Yoast, fallback to WordPress featured media
+    let ogImage: { url: string; width?: number; height?: number } | undefined;
+    if (yoast?.og_image?.[0]?.url) {
+      ogImage = {
+        url: fixImgUrl(yoast.og_image[0].url)!,
+        width: yoast.og_image[0].width,
+        height: yoast.og_image[0].height,
+      };
+    } else {
+      // Fallback: WordPress featured media via _embedded
+      const featured = post._embedded?.['wp:featuredmedia']?.[0];
+      if (featured?.source_url) {
+        ogImage = {
+          url: fixImgUrl(featured.source_url)!,
+          width: featured.media_details?.width,
+          height: featured.media_details?.height,
+        };
+      }
+    }
 
     return {
       title: yoast?.title || decodeHtml(post.title.rendered.replace(/<[^>]*>/g, '')),
