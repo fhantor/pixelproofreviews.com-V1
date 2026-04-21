@@ -8,9 +8,31 @@ import FeaturedReview from '@/components/FeaturedReview';
 import PostGrid from '@/components/PostGrid';
 import Sidebar from '@/components/Sidebar';
 
+const SITE_URL = 'https://www.pixelproofreviews.com';
+
 export const metadata: Metadata = {
+  title: 'Pixel Proof Reviews — Honest Digital Product Reviews',
+  description: 'In-depth reviews of digital tools, software, themes, plugins, and marketing solutions — backed by real-world testing and 12+ years of digital marketing expertise.',
   alternates: {
-    canonical: '/',
+    canonical: SITE_URL,
+  },
+  openGraph: {
+    url: SITE_URL,
+    title: 'Pixel Proof Reviews — Honest Digital Product Reviews',
+    description: 'In-depth reviews of digital tools, software, themes, plugins, and marketing solutions — backed by real-world testing and 12+ years of digital marketing expertise.',
+    type: 'website',
+    images: [{
+      url: `${SITE_URL}/og-image.png`,
+      width: 1200,
+      height: 630,
+      alt: 'Pixel Proof Reviews',
+    }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Pixel Proof Reviews — Honest Digital Product Reviews',
+    description: 'In-depth reviews of digital tools, software, themes, plugins, and marketing solutions — backed by real-world testing and 12+ years of digital marketing expertise.',
+    images: [`${SITE_URL}/og-image.png`],
   },
 };
 
