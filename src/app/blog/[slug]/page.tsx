@@ -22,15 +22,25 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   try {
     const post = await getBlogPostBySlug(slug);
     const yoast = post.yoast_head_json;
+    const canonicalUrl = `https://www.pixelproofreviews.com/blog/${slug}`;
     return {
       title: yoast?.title || decodeHtml(post.title.rendered.replace(/<[^>]*>/g, '')),
       description: yoast?.description || post.excerpt.rendered.replace(/<[^>]*>/g, '').slice(0, 160),
       alternates: {
-        canonical: `/blog/${slug}`,
+        canonical: canonicalUrl,
       },
       openGraph: yoast?.og_image?.[0]
-        ? { images: [{ url: yoast.og_image[0].url, width: yoast.og_image[0].width, height: yoast.og_image[0].height }] }
-        : undefined,
+        ? {
+            url: canonicalUrl,
+            title: yoast.og_title || yoast.title,
+            description: yoast.og_description || yoast.description,
+            images: [{ url: yoast.og_image[0].url, width: yoast.og_image[0].width, height: yoast.og_image[0].height }],
+          }
+        : {
+            url: canonicalUrl,
+            title: yoast?.og_title || yoast?.title || decodeHtml(post.title.rendered.replace(/<[^>]*>/g, '')),
+            description: yoast?.og_description || yoast?.description || post.excerpt.rendered.replace(/<[^>]*>/g, '').slice(0, 160),
+          },
     };
   } catch {
     return { title: 'Blog Post Not Found' };
