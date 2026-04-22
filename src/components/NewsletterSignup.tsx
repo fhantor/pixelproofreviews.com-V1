@@ -72,7 +72,7 @@ export default function NewsletterSignup({ className = '' }: NewsletterSignupPro
         }
       >
         {status === 'loading' ? (
-          '<>Sending...</>'
+          <>Sending...</>
         ) : status === 'success' ? (
           <>
             <CheckCircle className="w-3.5 h-3.5" />
