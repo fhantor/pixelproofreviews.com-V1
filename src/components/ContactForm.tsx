@@ -10,6 +10,8 @@ interface ContactFormProps {
 export default function ContactForm({ className = '' }: ContactFormProps) {
   // Force rebuild after Vercel cache issue: JS bundle served stale /api/* URLs
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
+  // eslint-disable-next-line no-unused-vars
+  const _rebuildMarker = 'v2-2026-04-22';
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [msg, setMsg] = useState('');
 
