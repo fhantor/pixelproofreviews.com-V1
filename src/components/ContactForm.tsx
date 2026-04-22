@@ -8,6 +8,7 @@ interface ContactFormProps {
 }
 
 export default function ContactForm({ className = '' }: ContactFormProps) {
+  // Force rebuild after Vercel cache issue: JS bundle served stale /api/* URLs
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [msg, setMsg] = useState('');
