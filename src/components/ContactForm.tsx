@@ -24,7 +24,7 @@ export default function ContactForm({ className = '' }: ContactFormProps) {
     setMsg('');
 
     try {
-      const res = await fetch('/api/contact', {
+      const res = await fetch('https://api.pixelproofreviews.com/wp-json/pp/v1/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),

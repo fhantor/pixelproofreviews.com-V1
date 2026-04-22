@@ -20,7 +20,7 @@ export default function NewsletterSignup({ className = '' }: NewsletterSignupPro
     setMsg('');
 
     try {
-      const res = await fetch('/api/newsletter', {
+      const res = await fetch('https://api.pixelproofreviews.com/wp-json/pp/v1/newsletter', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
