@@ -15,6 +15,7 @@ import Comments from '@/components/Comments';
 import ReadingProgress from '@/components/ReadingProgress';
 import SchemaMarkup from '@/components/SchemaMarkup';
 import { decodeHtml, toTitleCase } from '@/lib/utils';
+import { generateReviewSchema } from '@/lib/schema';
 
 // Don't pre-generate at build time — pages are generated on-demand via ISR
 export async function generateStaticParams() {
@@ -154,6 +155,28 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       <Header categories={categories} />
 
       <SchemaMarkup yoastSchema={post.yoast_head_json?.schema} url={canonicalUrl} />
+
+      {/* Product + Review Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@graph': generateReviewSchema({
+              postId: post.id,
+              title: decodeHtml(post.title.rendered.replace(/<[^>]*>/g, '')),
+              excerpt: post.excerpt.rendered.replace(/<[^>]*>/g, '').slice(0, 300),
+              url: canonicalUrl,
+              imageUrl: post._embedded?.['wp:featuredmedia']?.[0]?.source_url
+                ? fixImgUrl(post._embedded['wp:featuredmedia'][0].source_url)
+                : undefined,
+              datePublished: post.date,
+              dateModified: post.modified,
+              author: 'Fahim',
+            }),
+          }),
+        }}
+      />
 
       <main className="flex-1">
         {/* Breadcrumb */}

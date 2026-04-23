@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  trailingSlash: true,
   images: {
     remotePatterns: [
       {
@@ -13,7 +14,6 @@ const nextConfig = {
         pathname: '/wp-content/**',
       },
     ],
-    unoptimized: true,
   },
 };
 
