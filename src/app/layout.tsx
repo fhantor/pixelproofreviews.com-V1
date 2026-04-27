@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   description: 'Detailed, unbiased reviews of digital tools and software, backed by hands-on experience and 12+ years of SEO expertise.',
   metadataBase: new URL('https://www.pixelproofreviews.com'),
   alternates: {
-    canonical: '/',
+    canonical: undefined,
   },
   icons: {
     icon: '/favicon.svg',
