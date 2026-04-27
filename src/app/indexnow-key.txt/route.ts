@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
 export async function GET() {
-  return new NextResponse('b310ff50d4bf1091f226c225b104c6f0', {
+  return new NextResponse('ff39d7dc1d78f189d91a65150d1cf923', {
     headers: {
       'Content-Type': 'text/plain',
     },
